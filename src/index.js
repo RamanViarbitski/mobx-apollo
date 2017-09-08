@@ -1,17 +1,20 @@
 import { computed, extendObservable } from 'mobx';
 import { fromResource } from 'mobx-utils';
 
-export const queryToObservable = (query, { onError, onFetch, prop }) => {
+export const queryToObservable = (query, { onError, onFetch, prop, obj }) => {
   let subscription;
 
   return fromResource(
     sink =>
       (subscription = query.subscribe({
         next: ({ data }) => {
-          sink(Object.keys(data).length === 1 ? data[prop] : data);
-          onFetch && onFetch(data);
+          const newData = Object.keys(data).length === 1 ? data[prop] : data;
+          sink(newData);
+          if (onFetch) onFetch(newData, obj);
         },
-        error: error => onError && onError(error)
+        error: error => {
+          if (onError) onError(error, obj);
+        }
       })),
     () => subscription.unsubscribe()
   );
@@ -30,10 +33,13 @@ export const query = (obj, prop, descriptor) => {
     [privateName]: queryToObservable(client.watchQuery(options), {
       onError,
       onFetch,
-      prop
+      prop,
+      obj
     }),
     [prop]: computed(() => obj[privateName].current())
   });
 
   if (decorated) return ref;
+
+  return null;
 };

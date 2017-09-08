@@ -10,8 +10,8 @@ import { query } from 'mobx-apollo';
 type options = {
   client: apolloClientInstance, // new ApolloClient()
   query: gqlInstance, // gql`..`
-  onError: Function,
-  onFetch: Function, // invoked every time new data is fetched
+  onError: Function, // onError(error, ref), ref gives you direct access to your store
+  onFetch: Function, // onFetch(data, ref), invoked every time new data is fetched
   ...watchQueryOptions // (see Apollo Client docs)
 };
 

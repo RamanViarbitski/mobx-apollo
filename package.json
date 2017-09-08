@@ -1,7 +1,7 @@
 {
   "name": "mobx-apollo",
   "description": "A MobX and Apollo Client integration utility.",
-  "version": "0.0.9",
+  "version": "0.0.12",
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
@@ -12,9 +12,9 @@
     "mobx-utils": "^3.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1"
+    "babel-cli": "6.26.0",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-stage-0": "6.24.1"
   },
   "scripts": {
     "build": "babel src --out-dir lib --presets=es2015,stage-0"

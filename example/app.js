@@ -6,18 +6,17 @@ import { inject, observer } from 'mobx-react';
 @observer
 export default (class extends Component {
   componentDidMount() {
-    setTimeout(
-      () =>
-        this.props.postsStore
-          .createPost('Hello World!')
-          .catch(error => console.log(error.message)),
-      2500
-    );
+    const { createPost } = this.props.postsStore;
+
+    setTimeout(() => createPost('Hello World!').catch(error => console.log(error.message)), 2500);
   }
 
   render() {
-    this.props.postsStore.allPosts &&
-      this.props.postsStore.allPosts.forEach(post => console.log(post.title));
+    const { allPostsLoading, allPostsError, allPosts } = this.props;
+
+    console.log({ allPostsLoading, allPostsError });
+
+    if (allPosts) allPosts.forEach(post => console.log(post.title));
 
     return null;
   }

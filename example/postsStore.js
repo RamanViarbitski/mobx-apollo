@@ -1,14 +1,25 @@
+import { observable } from 'mobx';
 import { query } from 'mobx-apollo';
 
 import client from './client';
 import { allPosts, createPost } from './queries';
 
 export default new class {
+  @observable allPostsLoading = true;
+  @observable allPostsError = null;
+
   @query
   allPosts = {
     client,
     query: allPosts,
-    onError: error => console.log(error.message)
+    onFetch: (data, ref) => {
+      ref.allPostsLoading = false;
+      ref.allPostsError = null;
+    },
+    onError: (error, ref) => {
+      ref.allPostsLoading = false;
+      ref.allPostsError = error.message;
+    }
   };
 
   createPost = title =>

@@ -1,19 +1,26 @@
 import gql from 'graphql-tag';
 
+const postDetails = gql`
+  fragment postDetails on Post {
+    id
+    title
+  }
+`;
+
 export const allPosts = gql`
   {
     allPosts(orderBy: createdAt_DESC) {
-      id
-      title
+      ...postDetails
     }
   }
+  ${postDetails}
 `;
 
 export const createPost = gql`
   mutation createPost($title: String!) {
     createPost(title: $title) {
-      id
-      title
+      ...postDetails
     }
   }
+  ${postDetails}
 `;

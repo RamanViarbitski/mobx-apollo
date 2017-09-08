@@ -8,9 +8,10 @@ import App from './app';
 
 const stores = { postsStore };
 
-const Index = () =>
+const Index = () => (
   <Provider {...stores}>
     <App />
-  </Provider>;
+  </Provider>
+);
 
 export default Index;
