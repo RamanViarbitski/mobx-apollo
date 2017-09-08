@@ -12,7 +12,7 @@ export default (class extends Component {
   }
 
   render() {
-    const { allPostsLoading, allPostsError, allPosts } = this.props;
+    const { allPostsLoading, allPostsError, allPosts } = this.props.postsStore;
 
     console.log({ allPostsLoading, allPostsError });
 
