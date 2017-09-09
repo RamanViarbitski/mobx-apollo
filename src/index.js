@@ -11,6 +11,7 @@ const queryToObservable = (query, { onError, onFetch, prop }) => {
       if (onFetch) onFetch(newData);
     }),
     error: action(error => {
+      observableQuery.loading = false;
       observableQuery.error = error;
       if (onError) onError(error);
     })
