@@ -29,7 +29,7 @@ autorun(() => console.log(store.allPosts.data)); // [{ title: 'Hello World!' }]
 type response = {
   data: { queryAlias: Array<Object> } | Array<Object>, // object only if there are multiple queries in your gql`..`
   error: ApolloError, // (see Apollo Client docs)
-  loading: boolean, // (see Apollo Client docs)
+  loading: boolean,
   ref: ApolloObservableQuery // (see Apollo Client docs)
 };
 ```
