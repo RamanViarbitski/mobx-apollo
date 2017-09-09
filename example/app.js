@@ -14,9 +14,10 @@ export default (class extends Component {
   render() {
     const { allPostsLoading, allPostsError, allPosts } = this.props.postsStore;
 
-    console.log({ allPostsLoading, allPostsError });
-
-    if (allPosts) allPosts.forEach(post => console.log(post.title));
+    if (allPostsLoading) console.log('Loading ..');
+    else if (allPostsError) console.log('Error', allPostsError);
+    else if (allPosts && allPosts.length > 0) console.log(allPosts);
+    else console.log('No records.');
 
     return null;
   }
