@@ -111,9 +111,9 @@ class Example extends Component {
   render() {
     const { allPosts } = this.props.postsStore;
 
-    if (allPosts.error) console.log('Error', allPosts.error);
+    if (allPosts.error) console.error('Error', allPosts.error.message);
     else if (allPosts.loading) console.log('Loading ..');
-    else if (allPosts.data.length > 0) console.log('Data', allPosts.data);
+    else if (allPosts.data.length > 0) console.log('Data', JSON.stringify(allPosts.data, null, 2));
     else console.log('No data.');
 
     return null;
