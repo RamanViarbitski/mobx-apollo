@@ -1,6 +1,6 @@
 import { action, extendObservable, observable } from 'mobx';
 
-export const queryToObservable = (query, { onError, onFetch, prop }) => {
+const queryToObservable = (query, { onError, onFetch, prop }) => {
   const observableQuery = observable(query.currentResult());
 
   query.subscribe({
