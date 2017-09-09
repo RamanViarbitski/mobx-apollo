@@ -12,21 +12,26 @@ type options = {
   query: gqlInstance, // gql`..`
   onError?: Function,
   onFetch?: Function, // invoked every time new data is fetched
-  ...watchQueryOptions // (see Apollo Client docs)
+  ...ApolloWatchQueryOptions // (see Apollo Client docs)
 };
 
-class Store {
+const store = new class Store {
   @query allPosts = { ...options };
 
   // or without decorators
   constructor() {
     query(this, 'allPosts', { ...options });
   }
-}
-
-const store = new Store();
+}();
 
 autorun(() => console.log(store.allPosts.data)); // [{ title: 'Hello World!' }]
+
+type response = {
+  data: { queryAlias: Array<Object> } | Array<Object>, // object only if there are multiple queries in your gql`..`
+  error: ApolloError, // (see Apollo Client docs)
+  loading: boolean, // (see Apollo Client docs)
+  ref: ApolloObservableQuery // (see Apollo Client docs)
+};
 ```
 
 ## Example
