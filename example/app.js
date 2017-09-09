@@ -12,11 +12,11 @@ export default (class extends Component {
   }
 
   render() {
-    const { allPostsLoading, allPostsError, allPosts } = this.props.postsStore;
+    const { allPosts } = this.props.postsStore;
 
-    if (allPostsLoading) console.log('Loading ..');
-    else if (allPostsError) console.log('Error', allPostsError);
-    else if (allPosts && allPosts.length > 0) console.log(allPosts);
+    if (allPosts.error) console.log('Error', allPosts.error);
+    else if (allPosts.loading) console.log('Loading ..');
+    else if (allPosts.data.length > 0) console.log(allPosts.data);
     else console.log('No records.');
 
     return null;

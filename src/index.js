@@ -1,42 +1,33 @@
-import { computed, extendObservable } from 'mobx';
-import { fromResource } from 'mobx-utils';
+import { action, extendObservable, observable } from 'mobx';
 
-export const queryToObservable = (query, { onError, onFetch, prop, obj }) => {
-  let subscription;
+export const queryToObservable = (query, { onError, onFetch, prop }) => {
+  const observableQuery = observable(query.currentResult());
 
-  return fromResource(
-    sink =>
-      (subscription = query.subscribe({
-        next: ({ data }) => {
-          const newData = Object.keys(data).length === 1 ? data[prop] : data;
-          sink(newData);
-          if (onFetch) onFetch(newData, obj);
-        },
-        error: error => {
-          if (onError) onError(error, obj);
-        }
-      })),
-    () => subscription.unsubscribe()
-  );
+  query.subscribe({
+    next: action(result => {
+      const newData = Object.keys(result.data).length === 1 ? result.data[prop] : result.data;
+      observableQuery.loading = result.loading;
+      observableQuery.data = newData;
+      if (onFetch) onFetch(newData);
+    }),
+    error: action(error => {
+      observableQuery.error = error;
+      if (onError) onError(error);
+    })
+  });
+
+  return observableQuery;
 };
 
 export const query = (obj, prop, descriptor) => {
   const decorated = descriptor.initializer;
-
-  const privateName = `_${prop}`;
 
   const { client, onError, onFetch, ...options } = decorated
     ? descriptor.initializer()
     : descriptor;
 
   const ref = extendObservable(obj, {
-    [privateName]: queryToObservable(client.watchQuery(options), {
-      onError,
-      onFetch,
-      prop,
-      obj
-    }),
-    [prop]: computed(() => obj[privateName].current())
+    [prop]: queryToObservable(client.watchQuery(options), { onError, onFetch, prop })
   });
 
   if (decorated) return ref;
