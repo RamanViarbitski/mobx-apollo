@@ -15,7 +15,7 @@ type options = {
   ...ApolloWatchQueryOptions // (see Apollo Client docs)
 };
 
-const store = new class Store {
+const store = new class {
   @query allPosts = { ...options };
 
   // or without decorators
