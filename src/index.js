@@ -1,14 +1,14 @@
 import { action, extendObservable, observable } from 'mobx';
 
-const queryToObservable = (query, { onError, onFetch, prop }) => {
+const queryToObservable = (query, { onError, onFetch }) => {
   const observableQuery = observable(query.currentResult());
 
   observableQuery.ref = query;
 
   query.subscribe({
     next: action(value => {
-      const data =
-        Object.keys(value.data).length === 1 ? value.data[prop] : value.data;
+      const keys = Object.keys(value.data);
+      const data = keys.length === 1 ? value.data[keys[0]] : value.data;
 
       observableQuery.loading = value.loading;
       observableQuery.data = data;
@@ -34,8 +34,7 @@ export const query = (obj, prop, descriptor) => {
   return extendObservable(obj, {
     [prop]: queryToObservable(client.watchQuery(options), {
       onError,
-      onFetch,
-      prop
+      onFetch
     })
   });
 };

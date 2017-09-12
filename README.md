@@ -136,3 +136,6 @@ const ExampleContainer = () => (
 
 export default ExampleContainer;
 ```
+
+## Recipes
+- [Pagination](https://github.com/sonaye/mobx-apollo/issues/6#issuecomment-328302121)
