@@ -108,7 +108,7 @@ class Example extends Component {
       () =>
         this.props.postsStore
           .createPost('Hello World!')
-          .catch(error => console.log('Error', error.message)),
+          .catch(error => console.error(error.message)),
       2500
     );
   }
@@ -116,10 +116,10 @@ class Example extends Component {
   render() {
     const { allPosts } = this.props.postsStore;
 
-    if (allPosts.error) console.error('Error', allPosts.error.message);
+    if (allPosts.error) console.error(allPosts.error.message);
     else if (allPosts.loading) console.log('Loading ..');
-    else if (allPosts.data.length > 0) console.log('Data', JSON.stringify(allPosts.data, null, 2));
-    else console.log('No data.');
+    else if (allPosts.data.length === 0) console.log('No data :(');
+    else console.log(JSON.stringify(allPosts.data, null, 2));
 
     return null;
   }
