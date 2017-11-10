@@ -32,9 +32,11 @@ export const query = (obj, prop, descriptor) => {
     : descriptor;
 
   return extendObservable(obj, {
-    [prop]: queryToObservable(client.watchQuery(options), {
-      onError,
-      onFetch
-    })
+    get [prop]() {
+      return queryToObservable(client.watchQuery(options), {
+        onError,
+        onFetch
+      });
+    }
   });
 };
