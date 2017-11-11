@@ -3,25 +3,24 @@ import { action, extendObservable, observable } from 'mobx';
 const queryToObservable = (query, { onError, onFetch }) => {
   const observableQuery = observable(query.currentResult());
 
-  observableQuery.ref = query;
-
   query.subscribe({
     next: action(value => {
-      const keys = Object.keys(value.data);
-      const data = keys.length === 1 ? value.data[keys[0]] : value.data;
-
+      observableQuery.error = undefined;
       observableQuery.loading = value.loading;
-      observableQuery.data = data;
+      observableQuery.data = value.data;
 
-      if (onFetch) onFetch(data);
+      if (onFetch) onFetch(value.data);
     }),
     error: action(error => {
-      observableQuery.loading = false;
       observableQuery.error = error;
+      observableQuery.loading = false;
+      observableQuery.data = undefined;
 
       if (onError) onError(error);
     })
   });
+
+  observableQuery.ref = query;
 
   return observableQuery;
 };

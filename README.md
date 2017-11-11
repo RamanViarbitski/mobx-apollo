@@ -1,9 +1,11 @@
 # mobx-apollo
 
 # Installation
+
 `yarn add mobx mobx-apollo`
 
 # Usage
+
 ```javascript
 import { query } from 'mobx-apollo';
 
@@ -24,17 +26,18 @@ const store = new class {
   }
 }();
 
-autorun(() => console.log(store.allPosts.data)); // [{ title: 'Hello World!' }]
+autorun(() => console.log(store.allPosts.data.allPosts)); // [{ title: 'Hello World!' }]
 
 type response = {
-  data: { queryAlias: Array<Object> } | Array<Object>, // object only if there are multiple queries in your gql`..`
   error: ApolloError, // (see Apollo Client docs)
   loading: boolean,
+  data: { queryAlias: Array<Object> },
   ref: ApolloObservableQuery // (see Apollo Client docs)
 };
 ```
 
 ## Example
+
 ```javascript
 import React, { Component } from 'react';
 
@@ -118,8 +121,8 @@ class Example extends Component {
 
     if (allPosts.error) console.error(allPosts.error.message);
     else if (allPosts.loading) console.log('Loading ..');
-    else if (allPosts.data.length === 0) console.log('No data :(');
-    else console.log(JSON.stringify(allPosts.data, null, 2));
+    else if (allPosts.data.allPosts.length === 0) console.log('No data :(');
+    else console.log(JSON.stringify(allPosts.data.allPosts, null, 2));
 
     return null;
   }
@@ -138,4 +141,5 @@ export default ExampleContainer;
 ```
 
 ## Recipes
-- [Pagination](https://github.com/sonaye/mobx-apollo/issues/6#issuecomment-328302121)
+
+* [Pagination](https://github.com/sonaye/mobx-apollo/issues/6#issuecomment-328302121)
