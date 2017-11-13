@@ -128,17 +128,17 @@ const postsStore = new class {
 const Example = inject('postsStore')(
   observer(
     class extends Component {
-      createPost = () => this.props.postsStore.createPost('Hello World!');
+      sayHello = () => this.props.postsStore.createPost('Hello World!');
 
       render() {
         const { error, loading, count, posts } = this.props.postsStore;
 
         if (error) console.error(error);
         else if (loading) console.warn('Loading ..');
-        else if (count === 0) console.warn('No data :(');
+        else if (count === 0) console.warn('No posts :(');
         else console.table(posts);
 
-        return <button onClick={this.createPost}>+</button>;
+        return <button onClick={this.sayHello}>Say Hello</button>;
       }
     }
   )
@@ -155,3 +155,7 @@ const ExampleWithState = () => (
 
 export default ExampleWithState;
 ```
+
+## Recipes
+
+[Pagination](https://github.com/sonaye/mobx-apollo/issues/6#issuecomment-328302121)
