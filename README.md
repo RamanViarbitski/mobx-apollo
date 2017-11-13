@@ -27,6 +27,9 @@ const store = new class {
         return graphql({ ...config });
       }
     });
+
+    // when lazy loading, you should return graphql() without adding anything extra within the block to avoid over-fetching
+    // utilize another computed for any extra checking or manipulation of data
   }
 }();
 
