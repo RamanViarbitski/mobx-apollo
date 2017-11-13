@@ -7,9 +7,9 @@
 # Usage
 
 ```javascript
-import { query } from 'mobx-apollo';
+import graphql from 'mobx-apollo';
 
-type options = {
+type config = {
   client: apolloClientInstance, // new ApolloClient()
   query: gqlInstance, // gql`..`
   onError?: Function,
@@ -18,15 +18,19 @@ type options = {
 };
 
 const store = new class {
-  @query allPosts = { ...options };
-
-  // or without decorators
   constructor() {
-    query(this, 'allPosts', { ...options });
+    this.allPosts = graphql({ ...config });
+
+    // or lazy load it
+    extendObservable(this, {
+      get allPosts() {
+        return graphql({ ...config });
+      }
+    });
   }
 }();
 
-autorun(() => console.log(store.allPosts.data.allPosts)); // [{ title: 'Hello World!' }]
+autorun(() => console.log(toJS(store.allPosts.data.allPosts))); // [{ title: 'Hello World!' }]
 
 type response = {
   error: ApolloError, // (see Apollo Client docs)
@@ -41,12 +45,19 @@ type response = {
 ```javascript
 import React, { Component } from 'react';
 
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
-import gql from 'graphql-tag';
-import { inject, observer, Provider } from 'mobx-react';
-import { query } from 'mobx-apollo';
+// create-react-app example
+// yarn add apollo-client-preset graphql graphql-tag isomorphic-fetch mobx mobx-apollo mobx-react
 
-// schema built with graphcool
+import fetch from 'isomorphic-fetch';
+import gql from 'graphql-tag';
+import graphql from 'mobx-apollo';
+import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-client-preset';
+import { extendObservable, toJS } from 'mobx';
+import { inject, observer, Provider } from 'mobx-react';
+
+global.fetch = fetch;
+
+// schema built with Graphcool
 // type Post implements Node {
 //   createdAt: DateTime!
 //   id: ID! @isUnique
@@ -54,92 +65,93 @@ import { query } from 'mobx-apollo';
 //   title: String!
 // }
 
-// fragments
-const postDetails = gql`
-  fragment postDetails on Post {
-    id
-    title
-  }
-`;
-
-// queries
+// queries and mutations
 const allPostsQuery = gql`
   {
     allPosts(orderBy: createdAt_DESC) {
-      ...postDetails
+      id
+      title
     }
   }
-  ${postDetails}
 `;
 
-// mutations
 const createPostMutation = gql`
   mutation createPost($title: String!) {
     createPost(title: $title) {
-      ...postDetails
+      id
+      title
     }
   }
-  ${postDetails}
 `;
 
-// initializing an apollo client instance
+const uri = 'https://api.graph.cool/simple/v1/<project>';
+
 const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-    uri: 'https://api.graph.cool/simple/v1/<project>',
-    dataIdFromObject: o => o.id
-  })
+  link: new HttpLink({ uri }),
+  cache: new InMemoryCache()
 });
 
 // building a mobx store
 const postsStore = new class {
-  @query allPosts = { client, query: allPostsQuery };
+  constructor() {
+    extendObservable(this, {
+      get allPosts() {
+        return graphql({ client, query: allPostsQuery });
+      },
+      get error() {
+        return (this.allPosts.error && this.allPosts.error.message) || null;
+      },
+      get loading() {
+        return this.allPosts.loading;
+      },
+      get posts() {
+        return (this.allPosts.data && toJS(this.allPosts.data.allPosts)) || [];
+      },
+      get count() {
+        return this.posts.length;
+      }
+    });
+  }
 
   createPost = title =>
-    client.mutate({
-      mutation: createPostMutation,
-      variables: { title },
-      refetchQueries: [{ query: allPostsQuery }]
-    });
+    client
+      .mutate({
+        mutation: createPostMutation,
+        variables: { title },
+        refetchQueries: [{ query: allPostsQuery }]
+      })
+      .then(() => console.warn('Created a new post ..'))
+      .catch(error => console.error(error.message));
 }();
 
 // our main component
-@inject('postsStore')
-@observer
-class Example extends Component {
-  componentDidMount() {
-    setTimeout(
-      () =>
-        this.props.postsStore
-          .createPost('Hello World!')
-          .catch(error => console.error(error.message)),
-      2500
-    );
-  }
+const Example = inject('postsStore')(
+  observer(
+    class extends Component {
+      createPost = () => this.props.postsStore.createPost('Hello World!');
 
-  render() {
-    const { allPosts } = this.props.postsStore;
+      render() {
+        const { error, loading, count, posts } = this.props.postsStore;
 
-    if (allPosts.error) console.error(allPosts.error.message);
-    else if (allPosts.loading) console.log('Loading ..');
-    else if (allPosts.data.allPosts.length === 0) console.log('No data :(');
-    else console.log(JSON.stringify(allPosts.data.allPosts, null, 2));
+        if (error) console.error(error);
+        else if (loading) console.warn('Loading ..');
+        else if (count === 0) console.warn('No data :(');
+        else console.table(posts);
 
-    return null;
-  }
-}
+        return <button onClick={this.createPost}>+</button>;
+      }
+    }
+  )
+);
 
 // typically you would have multiple mobx stores here
 const stores = { postsStore };
 
-const ExampleContainer = () => (
+const ExampleWithState = () => (
   <Provider {...stores}>
     <Example />
   </Provider>
 );
 
-export default ExampleContainer;
+export default ExampleWithState;
 ```
-
-## Recipes
-
-* [Pagination](https://github.com/sonaye/mobx-apollo/issues/6#issuecomment-328302121)

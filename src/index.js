@@ -1,6 +1,10 @@
-import { action, extendObservable, observable } from 'mobx';
+import { action, observable } from 'mobx';
 
-const queryToObservable = (query, { onError, onFetch }) => {
+const graphql = config => {
+  const { client, onError, onFetch, ...opts } = config;
+
+  const query = client.watchQuery(opts);
+
   const observableQuery = observable(query.currentResult());
 
   query.subscribe({
@@ -25,17 +29,4 @@ const queryToObservable = (query, { onError, onFetch }) => {
   return observableQuery;
 };
 
-export const query = (obj, prop, descriptor) => {
-  const { client, onError, onFetch, ...options } = descriptor.initializer
-    ? descriptor.initializer()
-    : descriptor;
-
-  return extendObservable(obj, {
-    get [prop]() {
-      return queryToObservable(client.watchQuery(options), {
-        onError,
-        onFetch
-      });
-    }
-  });
-};
+export default graphql;
