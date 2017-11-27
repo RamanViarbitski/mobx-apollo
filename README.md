@@ -161,4 +161,7 @@ export default ExampleWithState;
 
 ## Recipes
 
-[Pagination](https://github.com/sonaye/mobx-apollo/issues/6#issuecomment-328302121)
+* [Pagination](https://github.com/sonaye/mobx-apollo/issues/6#issuecomment-328302121).
+* [Typescript Definitions](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/mobx-apollo),
+  details
+  [here](https://github.com/sonaye/mobx-apollo/issues/7#issuecomment-347224630).
