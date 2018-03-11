@@ -165,3 +165,4 @@ export default ExampleWithState;
 * [Typescript Definitions](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/mobx-apollo),
   details
   [here](https://github.com/sonaye/mobx-apollo/issues/7#issuecomment-347224630).
+* [Subscriptions](https://github.com/sonaye/mobx-apollo/issues/14#issuecomment-372114305)
