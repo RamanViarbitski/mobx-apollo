@@ -2,7 +2,7 @@
 
 # Installation
 
-`yarn add mobx mobx-apollo`
+`yarn add mobx@3 mobx-apollo`
 
 # Usage
 
@@ -49,16 +49,13 @@ type response = {
 import React, { Component } from 'react';
 
 // create-react-app example
-// yarn add apollo-client-preset graphql graphql-tag isomorphic-fetch mobx mobx-apollo mobx-react
+// yarn add apollo-client-preset graphql graphql-tag mobx@3 mobx-apollo mobx-react@4
 
-import fetch from 'isomorphic-fetch';
 import gql from 'graphql-tag';
 import graphql from 'mobx-apollo';
 import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-client-preset';
 import { extendObservable, toJS } from 'mobx';
 import { inject, observer, Provider } from 'mobx-react';
-
-global.fetch = fetch;
 
 // schema built with Graphcool
 // type Post implements Node {
@@ -161,8 +158,8 @@ export default ExampleWithState;
 
 ## Recipes
 
+* [Subscriptions](https://github.com/sonaye/mobx-apollo/issues/14#issuecomment-372114305).
 * [Pagination](https://github.com/sonaye/mobx-apollo/issues/6#issuecomment-328302121).
 * [Typescript Definitions](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/mobx-apollo),
   details
   [here](https://github.com/sonaye/mobx-apollo/issues/7#issuecomment-347224630).
-* [Subscriptions](https://github.com/sonaye/mobx-apollo/issues/14#issuecomment-372114305)
