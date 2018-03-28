@@ -1,5 +1,7 @@
 # mobx-apollo
 
+[![npm version](https://badge.fury.io/js/mobx-apollo.svg)](https://badge.fury.io/js/mobx-apollo)
+
 # Installation
 
 `yarn add mobx mobx-apollo`
