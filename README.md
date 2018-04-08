@@ -45,7 +45,11 @@ type response = {
 };
 ```
 
-## Example
+## Examples
+
+[![Edit 76j6x4lyx](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/76j6x4lyx)
+
+### Example without subscriptions
 
 ```javascript
 import React, { Component } from 'react';
@@ -265,7 +269,7 @@ const ExampleWithState = () => (
 export default ExampleWithState;
 ```
 
-## Example with subscriptions
+### Example with subscriptions
 
 ```diff
 import React, { Component } from 'react';
