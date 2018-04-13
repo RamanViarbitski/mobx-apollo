@@ -192,46 +192,33 @@ const Example = inject('postsStore')(
         const { error, loading, count, posts } = this.props.postsStore;
 
         if (error) return <p>{error}</p>;
-        else if (loading) return <p>Loading ..</p>;
-        else if (count === 0)
+        
+        if (loading) return <p>Loading ..</p>;
+        
+        if (count === 0)
           return (
             <div>
-              <p>
-                <button onClick={this.create}>Say Hello</button>
-              </p>
+              <button onClick={this.create}>Say Hello</button>
               <p>No posts :(</p>
             </div>
           );
 
         return (
           <div>
-            <p>
-              <button onClick={this.create}>Say Hello</button>
-            </p>
+            <button onClick={this.create}>Say Hello</button>
 
             <table style={{ width: '100%' }}>
               <thead>
                 <tr>
-                  <td>
-                    <strong>Index</strong>
-                  </td>
-                  <td>
-                    <strong>ID</strong>
-                  </td>
-                  <td>
-                    <strong>Title</strong>
-                  </td>
-                  <td>
-                    <strong>Created at</strong>
-                  </td>
-                  <td>
-                    <strong>Updated at</strong>
-                  </td>
-                  <td>
-                    <strong>Actions</strong>
-                  </td>
+                  <th>Index</th>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Created at</th>
+                  <th>Updated at</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
+              
               <tbody>
                 {posts.map((post, index) => (
                   <tr key={index}>
@@ -245,6 +232,7 @@ const Example = inject('postsStore')(
                         onClick={this.update.bind(this, post.id, post.title)}>
                         Edit
                       </button>{' '}
+                      
                       <button onClick={this.delete.bind(this, post.id)}>
                         Delete
                       </button>
@@ -469,46 +457,33 @@ const Example = inject('postsStore')(
         const { error, loading, count, posts } = this.props.postsStore;
 
         if (error) return <p>{error}</p>;
-        else if (loading) return <p>Loading ..</p>;
-        else if (count === 0)
+        
+        if (loading) return <p>Loading ..</p>;
+        
+        if (count === 0)
           return (
             <div>
-              <p>
-                <button onClick={this.create}>Say Hello</button>
-              </p>
+              <button onClick={this.create}>Say Hello</button>
               <p>No posts :(</p>
             </div>
           );
 
         return (
           <div>
-            <p>
-              <button onClick={this.create}>Say Hello</button>
-            </p>
+            <button onClick={this.create}>Say Hello</button>
 
             <table style={{ width: '100%' }}>
               <thead>
                 <tr>
-                  <td>
-                    <strong>Index</strong>
-                  </td>
-                  <td>
-                    <strong>ID</strong>
-                  </td>
-                  <td>
-                    <strong>Title</strong>
-                  </td>
-                  <td>
-                    <strong>Created at</strong>
-                  </td>
-                  <td>
-                    <strong>Updated at</strong>
-                  </td>
-                  <td>
-                    <strong>Actions</strong>
-                  </td>
+                  <th>Index</th>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Created at</th>
+                  <th>Updated at</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
+              
               <tbody>
                 {posts.map((post, index) => (
                   <tr key={index}>
@@ -522,6 +497,7 @@ const Example = inject('postsStore')(
                         onClick={this.update.bind(this, post.id, post.title)}>
                         Edit
                       </button>{' '}
+                      
                       <button onClick={this.delete.bind(this, post.id)}>
                         Delete
                       </button>
